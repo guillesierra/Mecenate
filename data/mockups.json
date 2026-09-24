@@ -1,0 +1,32 @@
+{
+  "title": "La obra en tres espacios",
+  "rooms": [
+    {
+      "id": "salon",
+      "label": "Salón moderno",
+      "image": "assets/mockups/salon-vacio-v2.png",
+      "position": {
+        "x": 0.5,
+        "y": 0.28
+      }
+    },
+    {
+      "id": "despacho",
+      "label": "Despacho",
+      "image": "assets/mockups/despacho-vacio-v2.png",
+      "position": {
+        "x": 0.5,
+        "y": 0.3
+      }
+    },
+    {
+      "id": "pasillo",
+      "label": "Pasillo elegante",
+      "image": "assets/mockups/pasillo-vacio-v2.png",
+      "position": {
+        "x": 0.5,
+        "y": 0.28
+      }
+    }
+  ]
+}
