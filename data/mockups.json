@@ -3,7 +3,7 @@
   "rooms": [
     {
       "id": "salon",
-      "label": "Salón moderno",
+      "label": "Salón",
       "image": "assets/mockups/salon-vacio-v2.png",
       "position": {
         "x": 0.5,
@@ -21,7 +21,7 @@
     },
     {
       "id": "pasillo",
-      "label": "Pasillo elegante",
+      "label": "Pasillo",
       "image": "assets/mockups/pasillo-vacio-v2.png",
       "position": {
         "x": 0.5,

@@ -116,7 +116,7 @@ async function init() {
       const response = await fetch(`data/${encodeURIComponent(file)}?v=8`, { cache: 'no-store' });
       return response.json();
     }));
-    const mockupsResponse = await fetch('data/mockups.json?v=5');
+    const mockupsResponse = await fetch('data/mockups.json?v=6');
     const mockups = await mockupsResponse.json();
     works = loadedWorks;
     rooms = mockups.rooms;
