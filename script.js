@@ -1,6 +1,47 @@
 const pages = [...document.querySelectorAll('.page')];
 let works = [];
 let rooms = [];
+const imageViewer = document.createElement('div');
+imageViewer.className = 'image-viewer';
+imageViewer.hidden = true;
+imageViewer.setAttribute('role', 'dialog');
+imageViewer.setAttribute('aria-modal', 'true');
+imageViewer.setAttribute('aria-label', 'Vista ampliada de la obra');
+imageViewer.tabIndex = -1;
+document.body.append(imageViewer);
+let viewerReturnTarget = null;
+
+function closeImageViewer() {
+  imageViewer.hidden = true;
+  imageViewer.replaceChildren();
+  document.body.style.overflow = '';
+  if (viewerReturnTarget?.isConnected) viewerReturnTarget.focus();
+  viewerReturnTarget = null;
+}
+
+function openImageViewer(target, isMockup = false) {
+  viewerReturnTarget = target;
+  imageViewer.replaceChildren();
+  const enlarged = target.cloneNode(true);
+
+  if (isMockup) {
+    const bounds = target.getBoundingClientRect();
+    const scale = Math.min((window.innerWidth * 0.94) / bounds.width, (window.innerHeight * 0.92) / bounds.height);
+    enlarged.style.width = `${bounds.width}px`;
+    enlarged.style.height = `${bounds.height}px`;
+    enlarged.style.transform = `scale(${scale})`;
+    enlarged.style.transformOrigin = 'center';
+    enlarged.querySelector('img').loading = 'eager';
+  } else {
+    enlarged.loading = 'eager';
+    enlarged.alt = `${target.alt} — vista ampliada`;
+  }
+
+  imageViewer.append(enlarged);
+  imageViewer.hidden = false;
+  document.body.style.overflow = 'hidden';
+  imageViewer.focus();
+}
 
 function showPage(id) {
   pages.forEach(page => { page.hidden = page.id !== id; });
@@ -38,7 +79,7 @@ function renderRoom(room, work) {
   const artworkWidthCm = dimensions ? Number(dimensions[1]) : 40;
   const artworkHeightCm = dimensions ? Number(dimensions[2]) : 30;
   return `<figure class="mockup-card">
-    <div class="mockup-scene" style="--scene:url('${asset(room.image)}');--x:${room.position.x * 100}%;--y:${room.position.y * 100}%">
+    <div class="mockup-scene" role="button" tabindex="0" aria-label="Ampliar mockup: ${room.label}" style="--scene:url('${asset(room.image)}');--x:${room.position.x * 100}%;--y:${room.position.y * 100}%">
       <div class="mockup-frame" style="--art-width:${artworkWidthCm};--art-height:${artworkHeightCm}"><img src="${artwork}" alt="${work.title} en ${room.label.toLowerCase()}" loading="lazy"></div>
     </div>
     <figcaption>${room.label}</figcaption>
@@ -60,7 +101,7 @@ function renderDetail(id) {
   ].filter(Boolean).join('');
 
   document.getElementById('detail-gallery').innerHTML = work.images.map((image, index) =>
-    `<img src="${asset(image)}" alt="${work.title}, imagen ${index + 1} de ${work.images.length}">`
+    `<img src="${asset(image)}" alt="${work.title}, imagen ${index + 1} de ${work.images.length}" tabindex="0" role="button" aria-label="Ampliar ${work.title}">`
   ).join('');
 
   document.getElementById('detail-mockups').innerHTML = rooms.map(room => renderRoom(room, work)).join('');
@@ -88,6 +129,28 @@ async function init() {
 }
 
 document.getElementById('back-to-works').addEventListener('click', () => { location.hash = 'obras'; });
+document.getElementById('detalle').addEventListener('click', event => {
+  if (eventViewerTarget(event)) return;
+  if (event.target === imageViewer) closeImageViewer();
+});
+document.getElementById('detalle').addEventListener('keydown', event => {
+  if (!['Enter', ' '].includes(event.key)) return;
+  if (eventViewerTarget(event)) event.preventDefault();
+});
+function eventViewerTarget(event) {
+  const mockup = event.target.closest('.mockup-scene');
+  const artwork = event.target.closest('.detail-gallery img');
+  const target = mockup || artwork;
+  if (!target) return false;
+  if (event.type === 'click' || (event.type === 'keydown' && ['Enter', ' '].includes(event.key))) {
+    openImageViewer(target, Boolean(mockup));
+  }
+  return true;
+}
+imageViewer.addEventListener('click', closeImageViewer);
+window.addEventListener('keydown', event => {
+  if (event.key === 'Escape' && !imageViewer.hidden) closeImageViewer();
+});
 document.getElementById('hero-image-link').href = '#obra/' + encodeURIComponent('penas-de-viguera-e-islallana');
 window.addEventListener('hashchange', route);
 init();
