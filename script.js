@@ -80,7 +80,7 @@ function renderRoom(room, work) {
   const artworkHeightCm = dimensions ? Number(dimensions[2]) : 30;
   return `<figure class="mockup-card">
     <div class="mockup-scene" role="button" tabindex="0" aria-label="Ampliar mockup: ${room.label}" style="--scene:url('${asset(room.image)}');--x:${room.position.x * 100}%;--y:${room.position.y * 100}%">
-      <div class="mockup-frame" style="--art-width:${artworkWidthCm};--art-height:${artworkHeightCm}"><img src="${artwork}" alt="${work.title} en ${room.label.toLowerCase()}" loading="lazy"></div>
+      <div class="mockup-frame" style="--art-width:${artworkWidthCm};--art-height:${artworkHeightCm}"><div class="mockup-mat"><img src="${artwork}" alt="${work.title} en ${room.label.toLowerCase()}" loading="lazy"></div></div>
     </div>
     <figcaption>${room.label}</figcaption>
   </figure>`;
