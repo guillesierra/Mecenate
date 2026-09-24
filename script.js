@@ -53,6 +53,7 @@ function renderDetail(id) {
   document.getElementById('detail-number').textContent = `OBRA ${String(works.indexOf(work) + 1).padStart(2, '0')} / ${String(works.length).padStart(2, '0')}`;
   document.getElementById('detail-meta').textContent = [work.year, work.material].filter(Boolean).join(' · ') || 'Pintura original';
   document.getElementById('detail-description').textContent = work.description;
+  document.getElementById('availability-link').hidden = work.availability === 'No disponible';
   document.getElementById('detail-specs').innerHTML = [
     work.dimensions && `<div>MEDIDAS&nbsp;&nbsp; ${work.dimensions}</div>`,
     work.availability && `<div>DISPONIBILIDAD&nbsp;&nbsp; ${work.availability}</div>`
@@ -71,7 +72,7 @@ async function init() {
     const manifestResponse = await fetch('data/works.json');
     const manifest = await manifestResponse.json();
     const loadedWorks = await Promise.all(manifest.works.map(async file => {
-      const response = await fetch(`data/${encodeURIComponent(file)}`);
+      const response = await fetch(`data/${encodeURIComponent(file)}?v=8`, { cache: 'no-store' });
       return response.json();
     }));
     const mockupsResponse = await fetch('data/mockups.json?v=5');
