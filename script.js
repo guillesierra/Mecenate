@@ -69,7 +69,7 @@ function renderGrid() {
     <a class="work-card" href="#obra/${encodeURIComponent(work.id)}" aria-label="Ver ${work.title}">
       <span class="work-image"><img loading="lazy" src="${asset(work.images[0])}" alt="${work.title}, obra original de Guille Sierra"></span>
       <span class="work-card-meta"><strong>${work.title}</strong><span>${work.year || 'Obra original'}</span></span>
-      <p class="work-subtitle">${work.material || 'Pintura original'}</p>
+      <p class="work-subtitle">${work.subtitle || work.material || 'Pintura original'}</p>
     </a>`).join('');
 }
 
@@ -104,13 +104,17 @@ function renderDetail(id) {
     `<img src="${asset(image)}" alt="${work.title}, imagen ${index + 1} de ${work.images.length}" tabindex="0" role="button" aria-label="Ampliar ${work.title}">`
   ).join('');
 
-  document.getElementById('detail-mockups').innerHTML = rooms.map(room => renderRoom(room, work)).join('');
+  const workRooms = (work.mockups || rooms.map(room => room.id))
+    .map(id => rooms.find(room => room.id === id))
+    .filter(Boolean);
+  document.querySelector('.mockups-section').hidden = workRooms.length === 0;
+  document.getElementById('detail-mockups').innerHTML = workRooms.map(room => renderRoom(room, work)).join('');
   showPage('detalle');
 }
 
 async function init() {
   try {
-    const manifestResponse = await fetch('data/works.json');
+    const manifestResponse = await fetch('data/works.json?v=2', { cache: 'no-store' });
     const manifest = await manifestResponse.json();
     const loadedWorks = await Promise.all(manifest.works.map(async file => {
       const response = await fetch(`data/${encodeURIComponent(file)}?v=8`, { cache: 'no-store' });
