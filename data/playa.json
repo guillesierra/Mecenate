@@ -1,0 +1,17 @@
+{
+  "id": "playa",
+  "title": "Playa",
+  "year": "2023",
+  "material": "Óleo sobre lienzo",
+  "dimensions": "30 × 40 cm",
+  "description": "Una playa de arena dorada, con olas suaves bajo un cielo azul.",
+  "availability": "Consultar",
+  "images": [
+    "Cuadros/Playa.jpeg"
+  ],
+  "mockups": [
+    "salon",
+    "despacho",
+    "pasillo"
+  ]
+}

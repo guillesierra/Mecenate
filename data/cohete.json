@@ -1,0 +1,17 @@
+{
+  "id": "cohete",
+  "title": "Cohete",
+  "year": "2026",
+  "material": "Acrílico sobre tablilla",
+  "dimensions": "40 × 80 cm",
+  "description": "Ship 31 (S31) y Super Heavy Booster 13 (B13), en ascenso sobre un fondo azul.",
+  "availability": "No disponible",
+  "images": [
+    "Cuadros/Ship%2031%20%28S31%29%20y%20el%20Super%20Heavy%20Booster%2013%20%28B13%29%20.jpeg"
+  ],
+  "mockups": [
+    "salon",
+    "despacho",
+    "pasillo"
+  ]
+}
